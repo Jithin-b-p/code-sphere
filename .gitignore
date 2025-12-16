@@ -1,0 +1,21 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Next.js
+.next/
+out/
+
+# Environment
+.env
+.env.local
+
+# Prisma
+prisma/migrations/
+
+# Docker
+pgdata/
+
+# OS
+.DS_Store

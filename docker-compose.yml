@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: codesphere
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  backend:
+    build: ./apps/backend
+    volumes:
+      - ./apps/backend:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+  frontend:
+    build: ./apps/frontend
+    volumes:
+      - ./apps/frontend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+volumes:
+  pgdata:
