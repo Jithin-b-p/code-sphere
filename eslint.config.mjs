@@ -4,6 +4,18 @@ import tseslint from 'typescript-eslint'
 export default [
   {
     ignores: ['node_modules', 'dist', 'build', '.next'],
+    overrides: [
+    {
+      files: ['prisma/**/*.js'],
+      env: {
+        node: true,
+      },
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+        'no-undef': 'off',
+      },
+    },
+  ],
   },
 
   js.configs.recommended,
@@ -17,4 +29,5 @@ export default [
       'no-console': 'off',
     },
   },
+  
 ]
