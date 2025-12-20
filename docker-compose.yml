@@ -10,9 +10,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
   backend:
-    build: ./apps/backend
+    build: 
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    env_file:
+      - .env  
     volumes:
-      - ./apps/backend:/app
+      - ./apps/backend/src:/app/src
+      - ./prisma:/app/prisma
     ports:
       - "4000:4000"
     depends_on:
