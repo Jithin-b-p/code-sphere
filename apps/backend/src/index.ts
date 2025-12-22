@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser'
 import {prisma} from "./prisma"
 
 import authRouters from './auth/auth.routes'
-
+import problemsRouters from './problems/problems.routes'
 
 const app = express()
 app.use(cors({
@@ -14,6 +14,7 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.json())
 app.use("/auth", authRouters)
+app.use("/problems", problemsRouters)
 
 app.get('/health', async (req, res) => {
   const users = await prisma.user.count()

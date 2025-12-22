@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../apps/backend/node_modules/.prisma/client"
 }
 
 datasource db {
@@ -19,13 +20,17 @@ model User {
 }
 
 model Problem {
-  id         Int       @id @default(autoincrement())
-  title      String
-  statement  String
-  difficulty Difficulty
-  createdAt  DateTime  @default(now())
-
-  testCases  TestCase[]
+  id          Int        @id @default(autoincrement())
+  title       String
+  slug        String     @unique
+  description String
+  difficulty  Difficulty
+  timeLimitMs Int        @default(1000) // milliseconds
+  memoryMb    Int        @default(256)
+  createdAt   DateTime   @default(now())
+  createdById Int? 
+  
+  testCases   TestCase[]
   submissions Submission[]
 }
 
