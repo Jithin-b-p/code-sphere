@@ -12,7 +12,7 @@ async function main() {
     update: {},
     create: {
       email: 'admin@codesphere.dev',
-      password: '$2b$12$replace_with_real_hash',
+      password: '$2b$12$o9a2owelponJgMvBsW1IqOterrBO/vwtS5YUzL/Z/CwEYcd8x.P7S',
       role: 'ADMIN',
       name: 'Admin User',
     },
