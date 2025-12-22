@@ -13,16 +13,14 @@ export interface AuthRequest extends Request {
     }
 }
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
-
 export function requireAuth(req: AuthRequest, res: Response, next: NextFunction) {
     
-    const token = req.cookies?.acess_token;
+    const token = req.cookies?.access_token;
     if(!token) return res.sendStatus(401);
 
     
     try {
-        req.user = verifyAccessToken(token) as any;
+        req.user = verifyAccessToken(token) as JwtPayload;
         next();
 
     }catch {

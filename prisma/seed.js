@@ -1,34 +1,66 @@
-// import { PrismaClient, Role, Difficulty } from '@prisma/client'
+/* eslint-disable no-console */
 
-const { PrismaClient, Role, Difficulty } = require('@prisma/client')
+const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log('🌱 Seeding database...')
 
-  await prisma.user.create({
-    data: {
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@codesphere.dev' },
+    update: {},
+    create: {
       email: 'admin@codesphere.dev',
-      password: 'dev-only-placeholder',
-      role: Role.ADMIN,
+      password: '$2b$12$replace_with_real_hash',
+      role: 'ADMIN',
       name: 'Admin User',
     },
   })
 
-  await prisma.problem.create({
-    data: {
+  console.log('✅ Admin user ready')
+
+  const problems = [
+    {
       title: 'Two Sum',
-      statement: 'Return indices of the two numbers such that they add up to target.',
-      difficulty: Difficulty.EASY,
+      slug: 'two-sum',
+      description: 'Given an array of integers, return indices of two numbers such that they add up to a specific target.',
+      difficulty: 'EASY',
+      timeLimitMs: 1000,
+      memoryMb: 256,
+      createdById: admin.id,
       testCases: {
         create: [
-          { input: '[2,7,11,15],9', output: '[0,1]' },
-          { input: '[3,2,4],6', output: '[1,2]' },
+          { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]' },
+          { input: 'nums = [3,2,4], target = 6', output: '[1,2]' },
         ],
       },
     },
-  })
+    {
+      title: 'Reverse String',
+      slug: 'reverse-string',
+      description: 'Write a function that reverses a string.',
+      difficulty: 'EASY',
+      timeLimitMs: 500,
+      memoryMb: 128,
+      createdById: admin.id,
+      testCases: {
+        create: [
+          { input: '"hello"', output: '"olleh"' },
+        ],
+      },
+    },
+  ]
+
+  for (const problem of problems) {
+    await prisma.problem.upsert({
+      where: { slug: problem.slug },
+      update: {},
+      create: problem,
+    })
+  }
+
+  console.log('✅ Problems seeded')
 
   console.log('✅ Seed completed')
 }
