@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -24,7 +22,8 @@ async function main() {
     {
       title: 'Two Sum',
       slug: 'two-sum',
-      description: 'Given an array of integers, return indices of two numbers such that they add up to a specific target.',
+      description:
+        'Given an array of integers, return indices of two numbers such that they add up to a specific target.',
       difficulty: 'EASY',
       timeLimitMs: 1000,
       memoryMb: 256,
@@ -45,9 +44,7 @@ async function main() {
       memoryMb: 128,
       createdById: admin.id,
       testCases: {
-        create: [
-          { input: '"hello"', output: '"olleh"' },
-        ],
+        create: [{ input: '"hello"', output: '"olleh"' }],
       },
     },
   ]
