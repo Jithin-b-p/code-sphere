@@ -45,16 +45,33 @@ model TestCase {
 
 model Submission {
   id        Int      @id @default(autoincrement())
-  language  String
-  source    String
-  status    String
-  createdAt DateTime @default(now())
-
-  user      User    @relation(fields: [userId], references: [id])
   userId    Int
-
-  problem   Problem @relation(fields: [problemId], references: [id])
   problemId Int
+  language  String
+  code      String
+  status    SubmissionStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  timeMs    Int? 
+  memoryKb  Int?
+  errorMsg  String?
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  
+  testResults SubmissionTestResult[]
+}
+
+model SubmissionTestResult {
+  id            Int      @id @default(autoincrement())
+  submissionId  Int
+  testIndex     Int
+  expected      String
+  actual        String?
+  passed        Boolean  @default(false)
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -66,4 +83,14 @@ enum Difficulty {
   EASY
   MEDIUM
   HARD
+}
+
+enum SubmissionStatus {
+  PENDING
+  RUNNING
+  ACCEPTED
+  WRONG_ANSWER
+  RUNTIME_ERROR
+  TIME_LIMIT_EXEEDED
+  FAILED
 }
