@@ -1,5 +1,5 @@
 export interface JudgeResult {
-  status: 'ACCEPTED' | 'WRONG_ANSWER' | 'RUNTIME_ERROR'
+  status: 'ACCEPTED' | 'WRONG_ANSWER' | 'RUNTIME_ERROR' | 'TIME_LIMIT_EXCEEDED'
   failedTestIndex?: number
   expected?: string
   actual?: string

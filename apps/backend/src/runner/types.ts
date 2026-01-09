@@ -9,6 +9,7 @@ export interface RunOutput {
   stderr?: string
   exitCode: number
   timeMs: number
+  timedOut: boolean
 }
 
 export interface Runner {

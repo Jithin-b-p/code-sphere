@@ -47,9 +47,13 @@ submissionQueue.on('job', async ({ submissionId }) => {
         status: result.status,
         timeMs: result.timeMs,
         errorMsg:
-          result.status !== 'ACCEPTED'
-            ? `Failed at test ${result.failedTestIndex}`
-            : null,
+          result.status === 'RUNTIME_ERROR'
+            ? 'Runtime error'
+            : result.status === 'TIME_LIMIT_EXCEEDED'
+              ? 'Time limit exceeded'
+              : result.status === 'WRONG_ANSWER'
+                ? `Wrong answer on test ${result.failedTestIndex}`
+                : null,
       },
     })
   } catch (err) {

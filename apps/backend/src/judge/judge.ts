@@ -1,15 +1,19 @@
 import { getRunner } from '../runner'
 import { normalizeOutput } from '../runner/normalize'
-import { JudgeInput, JudgeResult } from './types'
+import type { JudgeResult } from './types'
 
 export async function judgeSubmission({
   code,
   language,
   testCases,
   timeLimitMs,
-}: JudgeInput): Promise<JudgeResult> {
+}: {
+  code: string
+  language: string
+  testCases: { input: string; output: string }[]
+  timeLimitMs: number
+}): Promise<JudgeResult> {
   const runner = getRunner(language)
-
   let totalTime = 0
 
   for (let i = 0; i < testCases.length; i++) {
@@ -22,6 +26,23 @@ export async function judgeSubmission({
     })
 
     totalTime += result.timeMs
+
+    if (result.timedOut) {
+      return {
+        status: 'TIME_LIMIT_EXCEEDED',
+        failedTestIndex: i,
+        timeMs: totalTime,
+      }
+    }
+
+    if (result.exitCode !== 0) {
+      return {
+        status: 'RUNTIME_ERROR',
+        failedTestIndex: i,
+        actual: (result.stderr || '').slice(0, 512),
+        timeMs: totalTime,
+      }
+    }
 
     const actual = normalizeOutput(result.stdout)
     const expected = normalizeOutput(tc.output)
@@ -37,8 +58,5 @@ export async function judgeSubmission({
     }
   }
 
-  return {
-    status: 'ACCEPTED',
-    timeMs: totalTime,
-  }
+  return { status: 'ACCEPTED', timeMs: totalTime }
 }
