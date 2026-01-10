@@ -1,19 +1,26 @@
+import fs from 'fs/promises'
+import path from 'path'
+import { execProcess } from './exec/exec'
+import { createTempDir, cleanupTempDir } from './exec/temp'
 import type { Runner, RunInput, RunOutput } from './types'
 
 export class JavaScriptRunner implements Runner {
   async run(input: RunInput): Promise<RunOutput> {
-    // MOCK execution (Day 3 replaces this)
-    const start = Date.now()
+    const dir = await createTempDir()
+    try {
+      const file = path.join(dir, 'solution.js')
 
-    // Simulate correct behavior
-    const stdout = input.input.includes('fail')
-      ? 'wrong-output'
-      : 'expected-output'
+      await fs.writeFile(file, input.code)
 
-    return {
-      stdout,
-      exitCode: 0,
-      timeMs: Date.now() - start,
+      return await execProcess(
+        'node',
+        [file],
+        input.input,
+        dir,
+        input.timeLimitMs
+      )
+    } finally {
+      await cleanupTempDir(dir)
     }
   }
 }

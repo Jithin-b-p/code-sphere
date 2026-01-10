@@ -6,11 +6,6 @@ submissionQueue.on('job', async ({ submissionId }) => {
   console.log(`[worker] picked job submission=${submissionId}`)
 
   try {
-    await prisma.submission.update({
-      where: { id: submissionId },
-      data: { status: 'RUNNING' },
-    })
-
     const submission = await prisma.submission.findUnique({
       where: { id: submissionId },
     })
@@ -18,6 +13,11 @@ submissionQueue.on('job', async ({ submissionId }) => {
       console.error('[worker] submission not found', submissionId)
       return
     }
+
+    await prisma.submission.update({
+      where: { id: submissionId },
+      data: { status: 'RUNNING' },
+    })
 
     const problem = await prisma.problem.findUnique({
       where: { id: submission.problemId },
