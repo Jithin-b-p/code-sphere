@@ -44,7 +44,7 @@ async function main() {
       memoryMb: 128,
       createdById: admin.id,
       testCases: {
-        create: [{ input: '"hello"', output: '"olleh"' }],
+        create: [{ input: '"hello"', output: 'olleh' }],
       },
     },
   ]

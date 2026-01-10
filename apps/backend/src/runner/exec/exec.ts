@@ -46,7 +46,7 @@ export function execProcess(
       }
     })
 
-    proc.stdout.on('close', (code) => {
+    proc.on('close', (code) => {
       clearTimeout(timer)
       resolver({
         stdout,
